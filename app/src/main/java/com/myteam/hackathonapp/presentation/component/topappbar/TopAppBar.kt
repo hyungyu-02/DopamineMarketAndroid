@@ -24,8 +24,8 @@ fun HackathonTopAppBar(
             .fillMaxWidth()
             .statusBarsPadding()
             .height(56.dp)
-            .background(Color.White)
-            .padding(start = 19.dp, top = 10.dp, bottom = 12.dp, end = 23.dp),
+            .background(Color(0xFFFFFFFF))
+            .padding(start = 19.dp, end = 23.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
