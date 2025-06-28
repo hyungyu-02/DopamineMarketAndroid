@@ -26,7 +26,7 @@ fun HackathonNavGraph(
         composable(route = Route.Login.route) {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate("apps") {
+                    navController.navigate(Route.Apps.route) {
                         popUpTo(Route.Login.route) { inclusive = true }
                     }
                 }
@@ -34,11 +34,11 @@ fun HackathonNavGraph(
         }
 
         composable(route = Route.Apps.route) {
-            AppsScreen()
+            AppsScreen(navController = navController)
         }
 
         composable(route = Route.Routines.route) {
-            RoutinesScreen()
+            RoutinesScreen(navController = navController)
         }
 //
 //        composable(route = Route.My.route) {
