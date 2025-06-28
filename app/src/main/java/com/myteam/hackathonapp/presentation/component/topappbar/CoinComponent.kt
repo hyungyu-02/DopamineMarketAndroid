@@ -11,12 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.colors
+import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.typography
 
 
 @Composable
@@ -30,12 +28,7 @@ fun CoinComponent(
     ) {
         Text(
             text = "Coins: ",
-            style = TextStyle(
-                fontSize = 16.sp,
-                //fontFamily = FontFamily(Font(R.font.segoe_ui)),
-                fontWeight = FontWeight(700),
-                color = Color(0xFF000000),
-            )
+            style = typography.B_16
         )
 
         Spacer(modifier = Modifier.width(10.dp))
@@ -43,17 +36,13 @@ fun CoinComponent(
         Surface(
             modifier = Modifier.size(34.dp),
             shape = CircleShape,
-            color  = Color(0xFF3B73ED)
+            color  = colors.Main_Blue
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = coins.toString(),
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        //fontFamily = FontFamily(Font(R.font.segoe_ui)),
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFFFFFFFF),
-                    ),
+                    style = typography.B_16,
+                    color = colors.White,
                     maxLines = 1
                 )
             }
