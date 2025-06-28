@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.myteam.hackathonapp.presentation.apps.component.AddAppDialog
 import com.myteam.hackathonapp.presentation.apps.component.AddAppRectangle
 import com.myteam.hackathonapp.presentation.apps.component.AppItem
 import com.myteam.hackathonapp.presentation.apps.component.AppRectangle
@@ -40,6 +41,7 @@ fun AppsScreen(
     viewModel: AppsViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
+    var showModal by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         viewModel.getAppsData(1)
     }
@@ -55,13 +57,18 @@ fun AppsScreen(
             BottomNavigationBar(navController)
         },
         floatingActionButton = {
-            HackathonFAB { /* Apps 전용 FAB 액션 */ }
+            HackathonFAB { showModal = true }
         }
     ) { innerPadding ->
         AppsScreenContent(
             modifier = modifier
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
+        )
+    }
+    if(showModal){
+        AddAppDialog(
+            onDismiss = {showModal = false}
         )
     }
 }
