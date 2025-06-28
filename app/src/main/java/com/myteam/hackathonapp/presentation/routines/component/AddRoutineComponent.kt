@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -43,6 +44,7 @@ fun AddRoutineComponent(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
     ) {
+    var button_type = "데일리"
     var routine_name by remember { mutableStateOf("") }
     var emoji by remember { mutableStateOf("") }
     Dialog(onDismissRequest = onDismiss) {
@@ -74,13 +76,11 @@ fun AddRoutineComponent(
                             contentAlignment = Alignment.Center
                         ) {
                             OutlinedTextField(
-                                modifier = Modifier
-                                    .size(44.dp,42.dp),
                                 value = emoji,
                                 onValueChange = {emoji = it},
                                 placeholder = {
                                     Text(
-                                        text = ""
+                                        text = "\uD83C\uDF31"
                                     )
                                 },
                                 colors = TextFieldDefaults.colors(
@@ -98,12 +98,15 @@ fun AddRoutineComponent(
                     }
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         OutlinedTextField(
                             value = routine_name,
                             onValueChange = {routine_name = it},
                             modifier = Modifier
+                                .width(194.dp)
                                 .padding(top = 8.dp, bottom = 8.dp)
                                 .clip(RoundedCornerShape(7.dp))
                                 .border(0.5.dp, color = Color(0xFFDCDDDE), shape = RoundedCornerShape(7.dp)),
@@ -125,11 +128,7 @@ fun AddRoutineComponent(
                             ),
                             singleLine = true
                         )
-                        Box(
-                            modifier = Modifier
-                        ){
-
-                        }
+                        AddRoutineButton()
                     }
                     Text(
                         text = "카테고리",
