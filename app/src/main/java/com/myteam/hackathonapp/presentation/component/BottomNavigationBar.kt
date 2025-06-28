@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.myteam.hackathonapp.presentation.navigation.NavItems
 import com.myteam.hackathonapp.presentation.navigation.Route
+import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.colors
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -49,9 +50,7 @@ fun BottomNavigationBar(navController: NavController) {
                 label = {
                     Text(
                         item.label,
-                        color = if (currentRoute == item.route) Color(0xFF3B82F6) else Color(
-                            0xFF9CA3AF
-                        ),
+                        color = if (currentRoute == item.route) colors.Main_Blue else colors.Under_Menu_Grey,
                         modifier = Modifier
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center

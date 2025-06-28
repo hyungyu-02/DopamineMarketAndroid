@@ -1,12 +1,16 @@
 package com.myteam.hackathonapp.presentation.apps.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DrawerDefaults.shape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,26 +22,23 @@ import androidx.compose.ui.window.DialogProperties
 
 @Composable
 fun AddAppDialog(
-    showDialog: Boolean = true,
     onDismiss: () -> Unit,
-    onSave: (String, String) -> Unit
+    //onSave: (String, String) -> Unit
 ) {
     var appName by remember { mutableStateOf("") }
     var appUrl by remember { mutableStateOf("") }
-
-    if (showDialog) {
-        Dialog(
-            onDismissRequest = onDismiss,
-            properties = DialogProperties(usePlatformDefaultWidth = false)
-        ) {
-            Card(
+    Dialog(
+        onDismissRequest = onDismiss,
+    ) {
+        Surface(
+            shape = RoundedCornerShape(13.dp),
+            tonalElevation = 8.dp
+        ){
+            Box(
                 modifier = Modifier
-                    //.size(310.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 25.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                    .size(310.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(color = Color(0xFFFFFFFF)),
             ) {
                 Column(
                     modifier = Modifier
@@ -48,9 +49,8 @@ fun AddAppDialog(
                     Text(
                         text = "앱 추가하기",
                         fontSize = 16.sp,
-                        lineHeight = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                        fontWeight = FontWeight(600),
+                        color = Color(0xFF000000),
                         modifier = Modifier.padding(bottom = 12.dp)
                     )
 
@@ -91,7 +91,7 @@ fun AddAppDialog(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 101.dp),
+                            .padding(bottom = 50.dp),
                         shape = RoundedCornerShape(8.dp),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = Color(0xFFDDDDDD),        // 연한 회색 테두리
@@ -104,57 +104,54 @@ fun AddAppDialog(
 
                     // 버튼 섹션
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 0.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         // 저장하기 버튼 (파란색)
-                        Button(
-                            onClick = {
-                                if (appName.isNotBlank() && appUrl.isNotBlank()) {
-                                    onSave(appName, appUrl)
-                                }
-                            },
+                        Box(
                             modifier = Modifier
-                                .weight(1f)
-                                .width(130.dp)
-                                .height(40.dp),
+                                .clickable(
+                                    onClick = {
 
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF4285F4)
-                            ),
-                            shape = RoundedCornerShape(8.dp)
+                                    }
+                                )
+                                .width(130.dp)
+                                .height(40.dp)
+                                .clip(RoundedCornerShape(7.dp))
+                                .background(color = Color(0xFF3B73ED)),
+                            contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = "저장하기",
-                                color = Color.White,
+                                color = Color(0xFFFFFFFF),
                                 fontSize = 11.sp,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight(600),
                             )
                         }
-
-                        // 취소 버튼 (회색)
-                        Button(
-                            onClick = onDismiss,
+                        Box(
                             modifier = Modifier
-                                .weight(1f)
+                                .clickable(
+                                    onClick = {
+                                        onDismiss()
+                                    }
+                                )
                                 .width(130.dp)
-                                .height(40.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFF0F0F0)
-                            ),
-                            shape = RoundedCornerShape(8.dp),
-                            elevation = ButtonDefaults.buttonElevation(
-                                defaultElevation = 0.dp
-                            )
+                                .height(40.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(color = Color(0xFFFFFFFF))
+                                .border(width = 0.5.dp, color = Color(0xFFCACACA) ,shape = RoundedCornerShape(size = 7.dp)),
+                            contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = "취소",
-                                color = Color(0xFF484848),
-                                lineHeight = 16.sp,
                                 fontSize = 11.sp,
-                                fontWeight = FontWeight.Normal
+                                fontWeight = FontWeight(600),
+                                color = Color(0xFF000000)
                             )
                         }
+
                     }
                 }
             }
@@ -173,12 +170,7 @@ fun AddAppDialogPreview() {
             contentAlignment = Alignment.Center
         ) {
             AddAppDialog(
-                showDialog = true,
-                onDismiss = {},
-                onSave = { name, url ->
-                    println("저장: $name, $url")
-                }
+                onDismiss = {}
             )
         }
-    }
-}
+    }}

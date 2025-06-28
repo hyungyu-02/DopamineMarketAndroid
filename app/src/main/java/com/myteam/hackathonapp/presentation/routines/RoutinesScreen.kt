@@ -9,19 +9,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.myteam.hackathonapp.presentation.component.BottomNavigationBar
 import com.myteam.hackathonapp.presentation.component.HackathonFAB
 import com.myteam.hackathonapp.presentation.component.topappbar.HackathonTopAppBar
+import com.myteam.hackathonapp.presentation.routines.component.AddRoutineComponent
 import com.myteam.hackathonapp.presentation.routines.component.LazyRoutineComponent
+import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.colors
 
 
 @Composable
 fun RoutinesScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+    var showModal by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             HackathonTopAppBar(
@@ -33,13 +39,18 @@ fun RoutinesScreen(modifier: Modifier = Modifier, navController: NavHostControll
             BottomNavigationBar(navController)
         },
         floatingActionButton = {
-            HackathonFAB { /* Routines 전용 FAB 액션 */ }
+            HackathonFAB { showModal = true }
         }
     ) { innerPadding ->
         RoutineScreenContent(
             modifier = modifier
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
+        )
+    }
+    if(showModal){
+        AddRoutineComponent(
+            onDismiss = {showModal = false}
         )
     }
 }
@@ -49,7 +60,7 @@ fun RoutineScreenContent(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(0xFFF6F6F9)),
+            .background(color = colors.Background_Grey),
     ) {
         Column(
             modifier = Modifier
@@ -59,7 +70,7 @@ fun RoutineScreenContent(modifier: Modifier = Modifier) {
         ){
             LazyRoutineComponent(
                 modifier = Modifier
-                    .padding(top = 24.dp),
+                    .padding(top = 81.dp),
                 name = "고정루틴"
             )
             LazyRoutineComponent(
