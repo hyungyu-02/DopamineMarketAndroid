@@ -3,6 +3,8 @@ package com.myteam.hackathonapp.presentation.login
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.myteam.hackathonapp.R
+import com.myteam.hackathonapp.core.util.modifier.addFocusCleaner
 
 @Composable
 fun LoginScreen(
@@ -42,10 +46,18 @@ fun LoginScreen(
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    val idInteraction = remember { MutableInteractionSource() }
+    val pwInteraction = remember { MutableInteractionSource() }
+    val idFocused by idInteraction.collectIsFocusedAsState()
+    val pwFocused by pwInteraction.collectIsFocusedAsState()
+
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFFFFF)),
+            .background(Color(0xFFFFFFFF))
+            .addFocusCleaner(focusManager),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -81,21 +93,24 @@ fun LoginScreen(
             OutlinedTextField(
                 value = id,
                 onValueChange = { id = it },
-                label = {
-                    Text(
-                        text = "ID",
-                        style = TextStyle(
-                            fontSize = 15.sp,
-                            //fontFamily = FontFamily(Font(R.font.segoe_ui)),
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF9CA3AF),
+                interactionSource = idInteraction,
+                placeholder = {
+                    if (!idFocused && id.isEmpty()) {
+                        Text(
+                            text = "ID",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                //fontFamily = FontFamily(Font(R.font.segoe_ui)),
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF9CA3AF),
+                            )
                         )
-                    )
+                    }
                 },
                 textStyle = LocalTextStyle.current.copy( // 기본 텍스트 스타일 설정
-                    fontSize   = 14.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color      = Color(0xFF111827),
+                    color = Color(0xFF111827),
                     lineHeight = 20.sp
                 ),
                 modifier = Modifier
@@ -119,19 +134,22 @@ fun LoginScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = {
-                    Text(
-                        text = "Password",
-                        style = TextStyle(
-                            fontSize = 15.sp,
-                            //fontFamily = FontFamily(Font(R.font.segoe_ui)),
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF9CA3AF),
-                        )
-                    )
-                },
+                interactionSource = pwInteraction,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                placeholder = {
+                    if (!pwFocused && password.isEmpty()) {
+                        Text(
+                            text = "Password",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                //fontFamily = FontFamily(Font(R.font.segoe_ui)),
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF9CA3AF),
+                            )
+                        )
+                    }
+                },
                 modifier = Modifier
                     .width(209.dp)
                     .height(55.dp),
