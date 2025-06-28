@@ -134,7 +134,7 @@ fun AddAppDialog(
                             modifier = Modifier
                                 .clickable(
                                     onClick = {
-
+                                        onDismiss()
                                     }
                                 )
                                 .width(130.dp)
@@ -145,7 +145,7 @@ fun AddAppDialog(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "삭제하기",
+                                text = "취소",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight(600),
                                 color = Color(0xFF000000)

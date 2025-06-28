@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -35,12 +36,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.pm.ShortcutInfoCompat
+import com.myteam.hackathonapp.presentation.apps.component.AddAppDialog
 
 @Composable
 fun AddRoutineComponent(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
     ) {
+    var routine_name by remember { mutableStateOf("") }
+    var emoji by remember { mutableStateOf("") }
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(13.dp),
@@ -69,11 +73,16 @@ fun AddRoutineComponent(
                                 .background(color = Color(0xFFDBEAFE)),
                             contentAlignment = Alignment.Center
                         ) {
-                            TextField(
+                            OutlinedTextField(
                                 modifier = Modifier
                                     .size(44.dp,42.dp),
-                                value = "",
-                                onValueChange = {},
+                                value = emoji,
+                                onValueChange = {emoji = it},
+                                placeholder = {
+                                    Text(
+                                        text = ""
+                                    )
+                                },
                                 colors = TextFieldDefaults.colors(
                                     focusedContainerColor = Color(0xFFDBEAFE),
                                     disabledContainerColor = Color(0xFFDBEAFE),
@@ -83,9 +92,7 @@ fun AddRoutineComponent(
                                     disabledIndicatorColor = Color.Transparent,
                                     errorIndicatorColor = Color.Transparent
                                 ),
-                                textStyle = TextStyle(
-                                    fontSize = 35.sp
-                                )
+                                singleLine = true
                             )
                         }
                     }
@@ -93,13 +100,20 @@ fun AddRoutineComponent(
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {
-                        TextField(
+                        OutlinedTextField(
+                            value = routine_name,
+                            onValueChange = {routine_name = it},
                             modifier = Modifier
                                 .padding(top = 8.dp, bottom = 8.dp)
                                 .clip(RoundedCornerShape(7.dp))
                                 .border(0.5.dp, color = Color(0xFFDCDDDE), shape = RoundedCornerShape(7.dp)),
-                            value = "루틴 이름",
-                            onValueChange = {},
+                            placeholder = {
+                                Text(
+                                    text = "루틴 이름",
+                                    fontSize = 13.sp,
+                                    color = Color(0xFFCACACA)
+                                )
+                            },
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = Color(0xFFFFFFFF),
                                 disabledContainerColor = Color(0xFFFFFFFF),
@@ -109,10 +123,7 @@ fun AddRoutineComponent(
                                 disabledIndicatorColor = Color.Transparent,
                                 errorIndicatorColor = Color.Transparent
                             ),
-                            textStyle = TextStyle(
-                                fontSize = 13.sp,
-                                color = Color(0xFFCACACA)
-                            )
+                            singleLine = true
                         )
                         Box(
                             modifier = Modifier
@@ -184,7 +195,7 @@ fun AddRoutineComponent(
                                 .border(0.5.dp, color = Color(0xFFCACACA), shape = RoundedCornerShape(7.dp))
                                 .clickable(
                                     onClick = {
-
+                                        onDismiss()
                                     }
                                 ),
                             contentAlignment = Alignment.Center
