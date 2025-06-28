@@ -1,6 +1,5 @@
 package com.myteam.hackathonapp.presentation.login
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,8 +26,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,6 +35,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.decode.ImageDecoderDecoder
 import com.myteam.hackathonapp.R
 import com.myteam.hackathonapp.core.util.modifier.addFocusCleaner
 
@@ -52,6 +55,8 @@ fun LoginScreen(
     val pwFocused by pwInteraction.collectIsFocusedAsState()
 
     val focusManager = LocalFocusManager.current
+
+    val loader = rememberGifImageLoader()
 
     Column(
         modifier = Modifier
@@ -76,12 +81,12 @@ fun LoginScreen(
                     color = Color(0xFF000000),
                 )
             )
-            Image(
+            AsyncImage(
+                model = R.drawable.dopaminemarketlogogif,
+                contentDescription = "도파민 상점 애니메이션 로고",
+                imageLoader = loader, // ← 꼭 전달
                 modifier = Modifier
-                    .width(251.dp)
-                    .height(251.dp),
-                contentDescription = "도파민 상점 로고",
-                painter = painterResource(id = R.drawable.dopamine_market_logo),
+                    .size(251.dp)
             )
         }
 
@@ -190,6 +195,16 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(44.dp))
         }
 
+    }
+}
+
+@Composable
+fun rememberGifImageLoader(): ImageLoader {
+    val context = LocalContext.current
+    return remember {
+        ImageLoader.Builder(context)
+            .components { add(ImageDecoderDecoder.Factory()) } // API 28+
+            .build()
     }
 }
 
