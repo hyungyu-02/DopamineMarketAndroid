@@ -3,45 +3,48 @@ package com.myteam.hackathonapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.myteam.hackathonapp.presentation.component.BottomNavigationBar
+import com.myteam.hackathonapp.presentation.navigation.HackathonNavGraph
+import com.myteam.hackathonapp.presentation.navigation.Route
 import com.myteam.hackathonapp.ui.theme.HackathonAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContent {
             HackathonAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                val navController = rememberNavController()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute by remember(navBackStackEntry) {
+                    derivedStateOf {
+                        Route.getRoute(navBackStackEntry?.destination?.route)
+                    }
+                }
+
+                Scaffold(
+                    bottomBar = {
+                        if (currentRoute.isRoot){
+                            BottomNavigationBar(navController)
+                        }
+                    }
+                ) { innerPadding ->
+                    HackathonNavGraph(
+                        navController = navController,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HackathonAppTheme {
-        Greeting("Android")
     }
 }
