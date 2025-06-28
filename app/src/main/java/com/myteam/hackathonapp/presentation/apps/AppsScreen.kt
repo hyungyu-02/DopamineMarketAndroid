@@ -73,6 +73,7 @@ fun AppsScreen(
 fun AppsScreenContent( // 프리뷰용 Composable
     modifier: Modifier = Modifier
 ) {
+    var showModal by remember { mutableStateOf(false) }
     var showAddDialog by remember { mutableStateOf(false) }
     var apps by remember {
         mutableStateOf(
@@ -124,13 +125,19 @@ fun AppsScreenContent( // 프리뷰용 Composable
             }
             item {
                 AddAppRectangle(
-                    onClick = { showAddDialog = true },
+                    onClick = { showModal = true },
                     modifier = Modifier
                         .aspectRatio(1f) // 정사각형 비율 유지
                         .fillMaxSize() // 그리드 셀 내에서 최대 너비 사용
                 )
             }
+
         }
+    }
+    if(showModal){
+        AddAppDialog(
+            onDismiss = {showModal = false}
+        )
     }
 }
 
