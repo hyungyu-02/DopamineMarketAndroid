@@ -1,5 +1,6 @@
 package com.myteam.hackathonapp.presentation.apps
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,9 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.myteam.hackathonapp.data.local.UserSession
+import com.myteam.hackathonapp.domain.entity.AppsModel
 import com.myteam.hackathonapp.presentation.apps.component.AddAppDialog
 import com.myteam.hackathonapp.presentation.apps.component.AddAppRectangle
-import com.myteam.hackathonapp.presentation.apps.component.AppItem
 import com.myteam.hackathonapp.presentation.apps.component.AppRectangle
 import com.myteam.hackathonapp.presentation.component.BottomNavigationBar
 import com.myteam.hackathonapp.presentation.component.topappbar.HackathonTopAppBar
@@ -41,8 +43,12 @@ fun AppsScreen(
     navController: NavHostController
 ) {
     var showModal by remember { mutableStateOf(false) }
+    val userId = UserSession.userId?.toInt()
+
     LaunchedEffect(Unit) {
-        viewModel.getAppsData(1)
+        if(userId != null){
+            viewModel.getAppsData(userId = userId)
+        }
     }
 
     Scaffold(
@@ -59,33 +65,25 @@ fun AppsScreen(
         AppsScreenContent(
             modifier = modifier
                 .padding(innerPadding)
-                .consumeWindowInsets(innerPadding)
+                .consumeWindowInsets(innerPadding),
+            apps = viewModel.apps,
+            onAddAppClick = { showModal = true }
         )
     }
-    if(showModal){
+
+    if (showModal) {
         AddAppDialog(
-            onDismiss = {showModal = false}
+            onDismiss = { showModal = false }
         )
     }
 }
 
 @Composable
-fun AppsScreenContent( // 프리뷰용 Composable
-    modifier: Modifier = Modifier
+fun AppsScreenContent(
+    modifier: Modifier = Modifier,
+    apps: List<AppsModel>, // 🔥 AppsModel 리스트 받음
+    onAddAppClick: () -> Unit
 ) {
-    var showModal by remember { mutableStateOf(false) }
-    var showAddDialog by remember { mutableStateOf(false) }
-    var apps by remember {
-        mutableStateOf(
-            listOf(
-                AppItem("YouTube"),
-                AppItem("Instagram", true),
-                AppItem("Netflix"),
-                AppItem("TikTok"),
-                AppItem("Twitter")
-            )
-        )
-    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -107,42 +105,44 @@ fun AppsScreenContent( // 프리뷰용 Composable
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalArrangement = Arrangement.spacedBy(15.dp),
             modifier = Modifier.fillMaxWidth()
-        ){
+        ) {
             items(apps) { app ->
                 AppRectangle(
-                    appName = app.name,
-                    isSelected = app.isSelected,
+                    appName = app.appName,
+                    isSelected = app.isLocked, // 🔥 서버에서 isLocked 여부로 선택 상태
                     onClick = {
-                        apps = apps.map {
-                            if (it.name == app.name) it.copy(isSelected = !it.isSelected)
-                            else it
-                        }
+                        Log.d("AppsScreen", "${app.appName} 클릭됨 - 잠금 상태: ${!app.isLocked}")
+                        // 앱 선택 토글 로직은 서버에서 관리된다면 생략하거나 Dialog를 띄우는 정도만 처리
                     },
                     modifier = Modifier
-                        .aspectRatio(1f) // 정사각형 비율 유지
-                        .fillMaxSize() // 그리드 셀 내에서 최대 너비 사용
-                )
-            }
-            item {
-                AddAppRectangle(
-                    onClick = { showModal = true },
-                    modifier = Modifier
-                        .aspectRatio(1f) // 정사각형 비율 유지
-                        .fillMaxSize() // 그리드 셀 내에서 최대 너비 사용
+                        .aspectRatio(1f)
+                        .fillMaxSize()
                 )
             }
 
+            item {
+                AddAppRectangle(
+                    onClick = {
+                        Log.d("AppsScreen", "앱 추가 버튼 클릭됨")
+                        onAddAppClick()
+                    },
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .fillMaxSize()
+                )
+            }
         }
-    }
-    if(showModal){
-        AddAppDialog(
-            onDismiss = {showModal = false}
-        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun AppsScreenPreview() {
-    AppsScreenContent()
+    AppsScreenContent(
+        apps = listOf(
+            AppsModel(1, "YouTube", "https://youtube.com", coinRequired = 10, isLocked = false),
+            AppsModel(2, "Instagram", "https://instagram.com", coinRequired = 15, isLocked = true),
+        ),
+        onAddAppClick = {}
+    )
 }

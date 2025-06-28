@@ -13,5 +13,5 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindsHomeRepository(homeRepositoryImpl: AppsRepositoryImpl): AppsRepository
+    abstract fun bindsAppsRepository(homeRepositoryImpl: AppsRepositoryImpl): AppsRepository
 }

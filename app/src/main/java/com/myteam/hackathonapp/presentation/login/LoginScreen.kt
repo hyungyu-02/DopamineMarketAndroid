@@ -1,5 +1,6 @@
 package com.myteam.hackathonapp.presentation.login
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.decode.ImageDecoderDecoder
@@ -42,7 +44,8 @@ import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.typography
 @Composable
 fun LoginScreen(
     //navController: NavController,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -156,7 +159,14 @@ fun LoginScreen(
                     .height(52.dp)
                     .background(color = colors.Main_Blue, shape = RoundedCornerShape(size = 20.dp))
                     .clickable {
-                        onLoginSuccess()
+                        viewModel.login(
+                            nickname = id,
+                            password = password,
+                            onSuccess = onLoginSuccess,
+                            onFailure = {
+                                Log.e("LoginScreen", "로그인 실패")
+                            }
+                        )
                     },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -186,5 +196,7 @@ fun rememberGifImageLoader(): ImageLoader {
 @Preview
 @Composable
 private fun LoginScreenPreview() {
-    LoginScreen() {}
+    LoginScreen(
+        onLoginSuccess = {}
+    )
 }

@@ -1,7 +1,12 @@
 package com.myteam.hackathonapp.data.dto.response
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ResponseAppsDto(
-    val homeTitle: String,
-    val homeSubTitle: String,
-    val homeImage: Int
+    val appId: Int,
+    val appName: String,
+    val url: String,
+    val coinRequired: Int,
+    val isLocked: Boolean
 )
