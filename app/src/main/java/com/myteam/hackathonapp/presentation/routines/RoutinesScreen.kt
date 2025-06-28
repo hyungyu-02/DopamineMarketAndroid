@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,11 +21,13 @@ import androidx.navigation.NavHostController
 import com.myteam.hackathonapp.presentation.component.BottomNavigationBar
 import com.myteam.hackathonapp.presentation.component.HackathonFAB
 import com.myteam.hackathonapp.presentation.component.topappbar.HackathonTopAppBar
+import com.myteam.hackathonapp.presentation.routines.component.AddRoutineComponent
 import com.myteam.hackathonapp.presentation.routines.component.LazyRoutineComponent
 
 
 @Composable
 fun RoutinesScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+    var showModal by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             HackathonTopAppBar(
@@ -33,13 +39,18 @@ fun RoutinesScreen(modifier: Modifier = Modifier, navController: NavHostControll
             BottomNavigationBar(navController)
         },
         floatingActionButton = {
-            HackathonFAB { /* Routines 전용 FAB 액션 */ }
+            HackathonFAB { showModal = true }
         }
     ) { innerPadding ->
         RoutineScreenContent(
             modifier = modifier
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
+        )
+    }
+    if(showModal){
+        AddRoutineComponent(
+            onDismiss = {showModal = false}
         )
     }
 }
