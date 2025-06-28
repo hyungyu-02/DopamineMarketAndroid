@@ -1,21 +1,28 @@
 package com.myteam.hackathonapp.presentation.apps.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.myteam.hackathonapp.R
+import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.typography
 
 
 @Composable
@@ -27,27 +34,25 @@ fun AppRectangle(
 ) {
     Box(
         modifier = modifier
-            .width(100.dp)
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(15.dp))
+            .width(89.dp)
+            .height(91.dp)
+            //.aspectRatio(1f)
+            .shadow(elevation = 3.dp, clip = true, shape = RoundedCornerShape(25.dp))
             .background(Color.White)
-            .border(
-                width = if (isSelected) 3.dp else 1.dp,
-                color = if (isSelected) Color(0xFF4A90E2) else Color(0xFFE0E0E0),
-                shape = RoundedCornerShape(16.dp)
-            )
             .clickable { onClick() }
-            .padding(8.dp),
-        contentAlignment = Alignment.Center
     ) {
         // 텍스트로 앱 이름 표시
         Text(
             text = appName,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            color = if (isSelected) Color(0xFF4A90E2) else Color(0xFF333333),
+            style = typography.SB_12,
+            modifier = Modifier.fillMaxWidth().align(alignment = Alignment.TopCenter).padding(top = 25.dp),
             textAlign = TextAlign.Center,
             maxLines = 2
+        )
+        Image(
+            painter = if (isSelected) painterResource(id = R.drawable.lock) else painterResource(id = R.drawable.unlock),
+            contentDescription = "lock Icon",
+            modifier = Modifier.height(40.dp).align(Alignment.BottomCenter).padding(bottom = 18.dp),
         )
     }
 }
@@ -59,22 +64,20 @@ fun AddAppRectangle(
 ) {
     Box(
         modifier = modifier
-            .size(80.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFFF5F5F5))
-            .border(
-                width = 1.dp,
-                color = Color(0xFFE0E0E0),
-                shape = RoundedCornerShape(16.dp)
-            )
-            .clickable { onClick() },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "+",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF999999)
+            .width(89.dp)
+            .height(91.dp)
+            //.aspectRatio(1f)
+            .shadow(elevation = 3.dp, clip = true, shape = RoundedCornerShape(25.dp))
+            .background(Color.White)
+            .clickable { onClick() }
+    ){
+        Image(
+            painter = painterResource(id = R.drawable.lockappplusicon),
+            contentDescription = "Add App Icon",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(22.dp)
+                .align(Alignment.Center)
         )
     }
 }

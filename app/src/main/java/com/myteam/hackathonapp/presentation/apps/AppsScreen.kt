@@ -19,12 +19,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.myteam.hackathonapp.presentation.apps.component.AddAppDialog
@@ -32,8 +30,9 @@ import com.myteam.hackathonapp.presentation.apps.component.AddAppRectangle
 import com.myteam.hackathonapp.presentation.apps.component.AppItem
 import com.myteam.hackathonapp.presentation.apps.component.AppRectangle
 import com.myteam.hackathonapp.presentation.component.BottomNavigationBar
-import com.myteam.hackathonapp.presentation.component.HackathonFAB
 import com.myteam.hackathonapp.presentation.component.topappbar.HackathonTopAppBar
+import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.colors
+import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.typography
 
 @Composable
 fun AppsScreen(
@@ -55,9 +54,6 @@ fun AppsScreen(
         },
         bottomBar = {
             BottomNavigationBar(navController)
-        },
-        floatingActionButton = {
-            HackathonFAB { showModal = true }
         }
     ) { innerPadding ->
         AppsScreenContent(
@@ -92,21 +88,23 @@ fun AppsScreenContent( // 프리뷰용 Composable
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFF6F6F9))
-            .padding(start = 27.dp, end = 26.dp, top = 19.dp),
+            .background(color = colors.Background_Grey)
+            .padding(top = 19.dp)
+            .padding(horizontal = 26.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "제한된 앱 목록🔒",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF333333),
-            modifier = Modifier.padding(bottom = 16.dp)
+            text = "제한된 앱 목록",
+            style = typography.B_20,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
         )
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp),
             modifier = Modifier.fillMaxWidth()
         ){
             items(apps) { app ->
@@ -118,7 +116,10 @@ fun AppsScreenContent( // 프리뷰용 Composable
                             if (it.name == app.name) it.copy(isSelected = !it.isSelected)
                             else it
                         }
-                    }
+                    },
+                    modifier = Modifier
+                        .aspectRatio(1f) // 정사각형 비율 유지
+                        .fillMaxSize() // 그리드 셀 내에서 최대 너비 사용
                 )
             }
             item {
@@ -126,7 +127,7 @@ fun AppsScreenContent( // 프리뷰용 Composable
                     onClick = { showAddDialog = true },
                     modifier = Modifier
                         .aspectRatio(1f) // 정사각형 비율 유지
-                        .fillMaxWidth() // 그리드 셀 내에서 최대 너비 사용
+                        .fillMaxSize() // 그리드 셀 내에서 최대 너비 사용
                 )
             }
         }

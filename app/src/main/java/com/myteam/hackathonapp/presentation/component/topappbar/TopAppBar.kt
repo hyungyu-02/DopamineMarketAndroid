@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.colors
 
 @Composable
 fun HackathonTopAppBar(
@@ -24,7 +24,7 @@ fun HackathonTopAppBar(
             .fillMaxWidth()
             .statusBarsPadding()
             .height(56.dp)
-            .background(Color(0xFFFFFFFF))
+            .background(colors.White)
             .padding(start = 19.dp, end = 23.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
