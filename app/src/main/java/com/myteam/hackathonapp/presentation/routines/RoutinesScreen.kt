@@ -70,7 +70,7 @@ fun RoutineScreenContent(modifier: Modifier = Modifier) {
         ){
             LazyRoutineComponent(
                 modifier = Modifier
-                    .padding(top = 24.dp),
+                    .padding(top = 81.dp),
                 name = "고정루틴"
             )
             LazyRoutineComponent(
