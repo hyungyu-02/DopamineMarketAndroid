@@ -41,6 +41,7 @@ fun AppsScreen(
     navController: NavHostController
 ) {
     var showModal by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         viewModel.getAppsData(1)
     }
@@ -59,22 +60,22 @@ fun AppsScreen(
         AppsScreenContent(
             modifier = modifier
                 .padding(innerPadding)
-                .consumeWindowInsets(innerPadding)
+                .consumeWindowInsets(innerPadding),
+            onAddAppClick = { showModal = true }
         )
     }
-    if(showModal){
+
+    if (showModal) {
         AddAppDialog(
-            onDismiss = {showModal = false}
+            onDismiss = { showModal = false }
         )
     }
 }
-
 @Composable
-fun AppsScreenContent( // 프리뷰용 Composable
-    modifier: Modifier = Modifier
+fun AppsScreenContent(
+    modifier: Modifier = Modifier,
+    onAddAppClick: () -> Unit // 🔥 콜백만 받음
 ) {
-    var showModal by remember { mutableStateOf(false) }
-    var showAddDialog by remember { mutableStateOf(false) }
     var apps by remember {
         mutableStateOf(
             listOf(
@@ -86,6 +87,7 @@ fun AppsScreenContent( // 프리뷰용 Composable
             )
         )
     }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -107,7 +109,7 @@ fun AppsScreenContent( // 프리뷰용 Composable
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalArrangement = Arrangement.spacedBy(15.dp),
             modifier = Modifier.fillMaxWidth()
-        ){
+        ) {
             items(apps) { app ->
                 AppRectangle(
                     appName = app.name,
@@ -119,30 +121,25 @@ fun AppsScreenContent( // 프리뷰용 Composable
                         }
                     },
                     modifier = Modifier
-                        .aspectRatio(1f) // 정사각형 비율 유지
-                        .fillMaxSize() // 그리드 셀 내에서 최대 너비 사용
-                )
-            }
-            item {
-                AddAppRectangle(
-                    onClick = { showModal = true },
-                    modifier = Modifier
-                        .aspectRatio(1f) // 정사각형 비율 유지
-                        .fillMaxSize() // 그리드 셀 내에서 최대 너비 사용
+                        .aspectRatio(1f)
+                        .fillMaxSize()
                 )
             }
 
+            item {
+                AddAppRectangle(
+                    onClick = onAddAppClick, // ⬅️ 여기서 콜백 호출
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .fillMaxSize()
+                )
+            }
         }
-    }
-    if(showModal){
-        AddAppDialog(
-            onDismiss = {showModal = false}
-        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun AppsScreenPreview() {
-    AppsScreenContent()
+    AppsScreenContent(){}
 }
