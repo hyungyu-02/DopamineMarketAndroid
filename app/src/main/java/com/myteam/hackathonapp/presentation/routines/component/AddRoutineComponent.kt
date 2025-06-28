@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,13 +14,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,15 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.core.content.pm.ShortcutInfoCompat
-import com.myteam.hackathonapp.presentation.apps.component.AddAppDialog
+import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.colors
 
 @Composable
 fun AddRoutineComponent(
@@ -63,7 +56,7 @@ fun AddRoutineComponent(
                 modifier = Modifier
                     .size(310.dp, 350.dp)
                     .clip(RoundedCornerShape(13.dp))
-                    .background(color = Color(0xFFFFFFFF))
+                    .background(color = colors.White)
             ) {
                 Column(
                     modifier = Modifier
@@ -79,7 +72,7 @@ fun AddRoutineComponent(
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(RoundedCornerShape(30.dp))
-                                .background(color = Color(0xFFDBEAFE)),
+                                .background(color = colors.Sub_Blue),
                             contentAlignment = Alignment.Center
                         ) {
                             OutlinedTextField(
@@ -91,9 +84,9 @@ fun AddRoutineComponent(
                                     )
                                 },
                                 colors = TextFieldDefaults.colors(
-                                    focusedContainerColor = Color(0xFFDBEAFE),
-                                    disabledContainerColor = Color(0xFFDBEAFE),
-                                    unfocusedContainerColor = Color(0xFFDBEAFE),
+                                    focusedContainerColor = colors.Sub_Blue,
+                                    disabledContainerColor = colors.Sub_Blue,
+                                    unfocusedContainerColor = colors.Sub_Blue,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
@@ -118,7 +111,7 @@ fun AddRoutineComponent(
                                 .clip(RoundedCornerShape(7.dp))
                                 .border(
                                     0.5.dp,
-                                    color = Color(0xFFDCDDDE),
+                                    color = colors.Box_Grey,
                                     shape = RoundedCornerShape(7.dp)
                                 ),
                             placeholder = {
@@ -215,7 +208,7 @@ fun AddRoutineComponent(
                                             ) {
                                                 Text(
                                                     text = "직접 입력",
-                                                    color = Color(0xFFCACACA),
+                                                    color = colors.Box_Grey,
                                                     fontSize = 12.sp,
                                                     textAlign = TextAlign.Center
                                                 )
@@ -237,7 +230,7 @@ fun AddRoutineComponent(
                                 modifier = Modifier
                                     .size(130.dp, 40.dp)
                                     .clip(RoundedCornerShape(7.dp))
-                                    .background(color = Color(0xFF3B82F6))
+                                    .background(color = colors.Main_Blue)
                                     .clickable(
                                         onClick = {
 
