@@ -1,6 +1,7 @@
 package com.myteam.hackathonapp.di
 
 import com.myteam.hackathonapp.data.service.AppsService
+import com.myteam.hackathonapp.data.service.RoutineService
 import com.myteam.hackathonapp.data.service.UserService
 import dagger.Module
 import dagger.Provides
@@ -18,9 +19,14 @@ object ApiModule {
     fun provideAppsService(retrofit: Retrofit): AppsService =
         retrofit.create(AppsService::class.java)
 
-    // 🔥 요거 추가!
     @Provides
     @Singleton
     fun provideUserService(retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
+
+    // ✅ 추가 필요!
+    @Provides
+    @Singleton
+    fun provideRoutineService(retrofit: Retrofit): RoutineService =
+        retrofit.create(RoutineService::class.java)
 }

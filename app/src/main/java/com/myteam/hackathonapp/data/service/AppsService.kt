@@ -1,6 +1,7 @@
 package com.myteam.hackathonapp.data.service
 
 import com.myteam.hackathonapp.data.dto.request.RegisterAppRequestDto
+import com.myteam.hackathonapp.data.dto.response.AppsResponseWrapperDto
 import com.myteam.hackathonapp.data.dto.response.BaseResponse
 import com.myteam.hackathonapp.data.dto.response.ResponseAppsDto
 import retrofit2.http.Body
@@ -12,7 +13,7 @@ interface AppsService {
     @GET("apps")
     suspend fun getAppsData(
         @Query("userId") userId: Int
-    ): BaseResponse<List<ResponseAppsDto>>
+    ): BaseResponse<AppsResponseWrapperDto>
 
     @POST("apps")
     suspend fun registerApp(

@@ -13,11 +13,11 @@ class AppsRepositoryImpl @Inject constructor(
 
     override suspend fun getAppsData(userId: Int): Result<List<AppsModel>> =
         runCatching {
-            appsService.getAppsData(userId).data.map { it.toAppsModel() }
+            val response = appsService.getAppsData(userId)
+            response.data.apps.map { it.toAppsModel() }
         }
 
-    override suspend fun registerApp(request: RegisterAppRequestDto): Result<AppsModel> =
-        runCatching {
-            appsService.registerApp(request).data.toAppsModel()
-        }
+    override suspend fun registerApp(request: RegisterAppRequestDto): Result<AppsModel> {
+        TODO("Not yet implemented")
+    }
 }

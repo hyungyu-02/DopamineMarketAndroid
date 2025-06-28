@@ -6,14 +6,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissState
@@ -25,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,54 +33,46 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.myteam.hackathonapp.data.dto.response.RoutineItemDto
 import kotlinx.coroutines.delay
 
 @Composable
 fun LazyRoutineComponent(
-    modifier: Modifier = Modifier,
-    name: String
+    name: String,
+    routines: List<RoutineItemDto>,
+    onDeleteRoutine: (routineId: Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val lazyState = rememberLazyListState()
-    val RoutineList = remember {
-        mutableStateListOf(
-            RoutineWrapper(1) { RoutineComponent() },
-            RoutineWrapper(2){ RoutineComponent() },
-            RoutineWrapper(3){ RoutineComponent() },
-            RoutineWrapper(4){ RoutineComponent() },
-            RoutineWrapper(5){ RoutineComponent() },
-            RoutineWrapper(6){ RoutineComponent() }
+
+    Column(modifier = modifier) {
+        Text(
+            text = name,
+            fontSize = 20.sp,
+            fontWeight = FontWeight(500),
+            modifier = Modifier.padding(start = 29.dp, bottom = 17.dp)
         )
-    }
-    Text(
-        modifier = modifier
-            .padding(
-                start = 29.dp,
-                bottom = 17.dp
-            ),
-        text = name,
-        fontSize = 20.sp,
-        fontWeight = FontWeight(500)
-    )
-    LazyColumn(
-        modifier = Modifier
-            .height(180.dp),
-        state = lazyState,
-        contentPadding = PaddingValues(bottom = 8.dp)
-    ) {
-        items(
-            items = RoutineList,
-            key = { item -> item.id }
-        ) { item ->
-            SwipeToDeleteContainer(
-                onDelete = {
-                    RoutineList.remove(item)
+
+        LazyColumn(
+            modifier = Modifier.height(180.dp),
+            state = lazyState,
+            contentPadding = PaddingValues(bottom = 8.dp)
+        ) {
+            items(
+                items = routines,
+                key = { item -> item.routineId }
+            ) { item ->
+                SwipeToDeleteContainer(
+                    onDelete = { onDeleteRoutine(item.routineId) }
+                ) {
+                    RoutineComponent(item)
                 }
-            ) {
-                item.content()
             }
         }
     }
 }
+
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

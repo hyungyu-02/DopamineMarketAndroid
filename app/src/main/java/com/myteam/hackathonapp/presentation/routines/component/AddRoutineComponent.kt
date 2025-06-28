@@ -1,5 +1,6 @@
 package com.myteam.hackathonapp.presentation.routines.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,17 +31,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.myteam.hackathonapp.ui.theme.DopamineMarketTheme.colors
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.myteam.hackathonapp.presentation.routines.viewmodel.RoutineViewModel
 
+fun mapCategoryToServerEnum(category: String): String {
+    return when (category) {
+        "운동" -> "Exercise"
+        "일상" -> "LifeStyle"
+        "학습" -> "Learning"
+        "식단" -> "Diet"
+        else -> "Unknown"
+    }
+}
 @Composable
 fun AddRoutineComponent(
     modifier: Modifier = Modifier,
-    onDismiss: () -> Unit
-    ) {
+    onDismiss: () -> Unit,
+    viewModel: RoutineViewModel = hiltViewModel()
+) {
     var button_type = "데일리"
     var time by remember { mutableStateOf("") }
     var routine_name by remember { mutableStateOf("") }
@@ -56,7 +67,7 @@ fun AddRoutineComponent(
                 modifier = Modifier
                     .size(310.dp, 350.dp)
                     .clip(RoundedCornerShape(13.dp))
-                    .background(color = colors.White)
+                    .background(color = Color(0xFFFFFFFF))
             ) {
                 Column(
                     modifier = Modifier
@@ -72,7 +83,7 @@ fun AddRoutineComponent(
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(RoundedCornerShape(30.dp))
-                                .background(color = colors.Sub_Blue),
+                                .background(color = Color(0xFFDBEAFE)),
                             contentAlignment = Alignment.Center
                         ) {
                             OutlinedTextField(
@@ -84,9 +95,9 @@ fun AddRoutineComponent(
                                     )
                                 },
                                 colors = TextFieldDefaults.colors(
-                                    focusedContainerColor = colors.Sub_Blue,
-                                    disabledContainerColor = colors.Sub_Blue,
-                                    unfocusedContainerColor = colors.Sub_Blue,
+                                    focusedContainerColor = Color(0xFFDBEAFE),
+                                    disabledContainerColor = Color(0xFFDBEAFE),
+                                    unfocusedContainerColor = Color(0xFFDBEAFE),
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
@@ -111,7 +122,7 @@ fun AddRoutineComponent(
                                 .clip(RoundedCornerShape(7.dp))
                                 .border(
                                     0.5.dp,
-                                    color = colors.Box_Grey,
+                                    color = Color(0xFFDCDDDE),
                                     shape = RoundedCornerShape(7.dp)
                                 ),
                             placeholder = {
@@ -155,130 +166,147 @@ fun AddRoutineComponent(
                                 }
                             )
                         }}
-                        Text(
-                            modifier = Modifier
-                                .padding(top = 10.dp),
-                            text = "카테고리",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(600)
-                        )
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            listOf("없음", "10분", "20분").forEach { category ->
-                                ButtonComponent(
-                                    buttonText = category,
-                                    isSelected = selectedCategory2 == category,
-                                    onClick = {
-                                        selectedCategory2 = category
-                                    }
-                                )
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .size(60.dp, 32.dp)
-                                    .clickable(
-                                        onClick = {
-
-                                        }
-                                    )
-                                    .clip(RoundedCornerShape(6.dp))
-                                    .border(
-                                        0.5.dp,
-                                        color = Color(0xFFCACACA),
-                                        shape = RoundedCornerShape(6.dp)
-                                    ),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                BasicTextField(
-                                    value = time,
-                                    onValueChange = { time = it },
-                                    singleLine = true,
-                                    modifier = Modifier.fillMaxSize(),
-                                    textStyle = TextStyle(
-                                        fontSize = 12.sp,
-                                        textAlign = TextAlign.Center,
-                                        lineHeight = 32.sp
-                                    ),
-                                    decorationBox = { innerTextField ->
-                                        if (time.isEmpty()) {
-                                            Box(
-                                                modifier = Modifier,
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Text(
-                                                    text = "직접 입력",
-                                                    color = colors.Box_Grey,
-                                                    fontSize = 12.sp,
-                                                    textAlign = TextAlign.Center
-                                                )
-                                            }
-                                        }
-                                        innerTextField()
-                                    }
-                                )
-                            }
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 10.dp),
+                        text = "카테고리",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight(600)
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        listOf("없음", "10분", "20분").forEach { category ->
+                            ButtonComponent(
+                                buttonText = category,
+                                isSelected = selectedCategory2 == category,
+                                onClick = {
+                                    selectedCategory2 = category
+                                }
+                            )
                         }
-                        Row(
+                        Box(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 20.dp, bottom = 3.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(130.dp, 40.dp)
-                                    .clip(RoundedCornerShape(7.dp))
-                                    .background(color = colors.Main_Blue)
-                                    .clickable(
-                                        onClick = {
+                                .size(60.dp, 32.dp)
+                                .clickable(
+                                    onClick = {
 
-                                        }
-                                    ),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = "저장하기",
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight(600),
-                                    color = Color(0xFFFFFFFF)
+                                    }
                                 )
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .size(130.dp, 40.dp)
-                                    .clip(RoundedCornerShape(7.dp))
-                                    .background(color = Color(0xFFFFFFFF))
-                                    .border(
-                                        0.5.dp,
-                                        color = Color(0xFFCACACA),
-                                        shape = RoundedCornerShape(7.dp)
-                                    )
-                                    .clickable(
-                                        onClick = {
-                                            onDismiss()
+                                .clip(RoundedCornerShape(6.dp))
+                                .border(
+                                    0.5.dp,
+                                    color = Color(0xFFCACACA),
+                                    shape = RoundedCornerShape(6.dp)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            BasicTextField(
+                                value = time,
+                                onValueChange = { time = it },
+                                singleLine = true,
+                                modifier = Modifier.fillMaxSize(),
+                                textStyle = TextStyle(
+                                    fontSize = 12.sp,
+                                    textAlign = TextAlign.Center,
+                                    lineHeight = 32.sp
+                                ),
+                                decorationBox = { innerTextField ->
+                                    if (time.isEmpty()) {
+                                        Box(
+                                            modifier = Modifier,
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = "직접 입력",
+                                                color = Color(0xFFCACACA),
+                                                fontSize = 12.sp,
+                                                textAlign = TextAlign.Center
+                                            )
                                         }
-                                    ),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = "취소",
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight(600)
+                                    }
+                                    innerTextField()
+                                }
+                            )
+                        }
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp, bottom = 3.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(130.dp, 40.dp)
+                                .clip(RoundedCornerShape(7.dp))
+                                .background(color = Color(0xFF3B82F6))
+                                .clickable(
+                                    onClick = {
+                                        val timerInt = when {
+                                            selectedCategory2 == "없음" -> 0
+                                            selectedCategory2 == "10분" -> 10
+                                            selectedCategory2 == "20분" -> 20
+                                            time.toIntOrNull() != null -> time.toInt()
+                                            else -> 0
+                                        }
+
+                                        if (routine_name.isNotBlank() && selectedCategory != null) {
+                                            val serverCategory = mapCategoryToServerEnum(selectedCategory!!)
+                                            viewModel.addRoutine(
+                                                userId = 1,
+                                                title = routine_name,
+                                                category = serverCategory,
+                                                timer = timerInt,
+                                                isDaily = button_type == "데일리",
+                                                onSuccess = { onDismiss() },
+                                                onError = { msg ->
+                                                    Log.e("AddRoutine", "루틴 등록 실패: $msg")
+                                                }
+                                            )
+                                        } else {
+                                            Log.e("AddRoutine", "루틴 이름 또는 카테고리 없음")
+                                        }
+                                        onDismiss()
+                                    }
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "저장하기",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight(600),
+                                color = Color(0xFFFFFFFF)
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(130.dp, 40.dp)
+                                .clip(RoundedCornerShape(7.dp))
+                                .background(color = Color(0xFFFFFFFF))
+                                .border(
+                                    0.5.dp,
+                                    color = Color(0xFFCACACA),
+                                    shape = RoundedCornerShape(7.dp)
                                 )
-                            }
+                                .clickable(
+                                    onClick = {
+                                        onDismiss()
+                                    }
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "취소",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight(600)
+                            )
                         }
                     }
                 }
             }
         }
-
     }
 
-@Preview(showBackground = true)
-@Composable
-private fun AddRoutineComponentPreview(modifier: Modifier = Modifier) {
-    var showModal by remember { mutableStateOf(false) }
-    AddRoutineComponent(onDismiss = {showModal = false})
 }

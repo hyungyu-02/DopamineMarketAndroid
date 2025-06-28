@@ -1,5 +1,6 @@
 package com.myteam.hackathonapp.presentation.apps
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,9 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.myteam.hackathonapp.data.local.UserSession
+import com.myteam.hackathonapp.domain.entity.AppsModel
 import com.myteam.hackathonapp.presentation.apps.component.AddAppDialog
 import com.myteam.hackathonapp.presentation.apps.component.AddAppRectangle
-import com.myteam.hackathonapp.presentation.apps.component.AppItem
 import com.myteam.hackathonapp.presentation.apps.component.AppRectangle
 import com.myteam.hackathonapp.presentation.component.BottomNavigationBar
 import com.myteam.hackathonapp.presentation.component.topappbar.HackathonTopAppBar
@@ -41,9 +43,12 @@ fun AppsScreen(
     navController: NavHostController
 ) {
     var showModal by remember { mutableStateOf(false) }
+    val userId = UserSession.userId?.toInt()
 
     LaunchedEffect(Unit) {
-        viewModel.getAppsData(1)
+        if(userId != null){
+            viewModel.getAppsData(userId = userId)
+        }
     }
 
     Scaffold(
@@ -61,6 +66,7 @@ fun AppsScreen(
             modifier = modifier
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding),
+            apps = viewModel.apps,
             onAddAppClick = { showModal = true }
         )
     }
@@ -71,23 +77,13 @@ fun AppsScreen(
         )
     }
 }
+
 @Composable
 fun AppsScreenContent(
     modifier: Modifier = Modifier,
-    onAddAppClick: () -> Unit // 🔥 콜백만 받음
+    apps: List<AppsModel>, // 🔥 AppsModel 리스트 받음
+    onAddAppClick: () -> Unit
 ) {
-    var apps by remember {
-        mutableStateOf(
-            listOf(
-                AppItem("YouTube"),
-                AppItem("Instagram", true),
-                AppItem("Netflix"),
-                AppItem("TikTok"),
-                AppItem("Twitter")
-            )
-        )
-    }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -112,13 +108,11 @@ fun AppsScreenContent(
         ) {
             items(apps) { app ->
                 AppRectangle(
-                    appName = app.name,
-                    isSelected = app.isSelected,
+                    appName = app.appName,
+                    isSelected = app.isLocked, // 🔥 서버에서 isLocked 여부로 선택 상태
                     onClick = {
-                        apps = apps.map {
-                            if (it.name == app.name) it.copy(isSelected = !it.isSelected)
-                            else it
-                        }
+                        Log.d("AppsScreen", "${app.appName} 클릭됨 - 잠금 상태: ${!app.isLocked}")
+                        // 앱 선택 토글 로직은 서버에서 관리된다면 생략하거나 Dialog를 띄우는 정도만 처리
                     },
                     modifier = Modifier
                         .aspectRatio(1f)
@@ -128,7 +122,10 @@ fun AppsScreenContent(
 
             item {
                 AddAppRectangle(
-                    onClick = onAddAppClick, // ⬅️ 여기서 콜백 호출
+                    onClick = {
+                        Log.d("AppsScreen", "앱 추가 버튼 클릭됨")
+                        onAddAppClick()
+                    },
                     modifier = Modifier
                         .aspectRatio(1f)
                         .fillMaxSize()
@@ -141,5 +138,11 @@ fun AppsScreenContent(
 @Preview(showBackground = true)
 @Composable
 private fun AppsScreenPreview() {
-    AppsScreenContent(){}
+    AppsScreenContent(
+        apps = listOf(
+            AppsModel(1, "YouTube", "https://youtube.com", coinRequired = 10, isLocked = false),
+            AppsModel(2, "Instagram", "https://instagram.com", coinRequired = 15, isLocked = true),
+        ),
+        onAddAppClick = {}
+    )
 }
