@@ -35,8 +35,10 @@ fun RoutineComponent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(bottom = 8.dp)
             .height(60.dp)
-            .border(1.dp, Color.Blue)
+            .clip(RoundedCornerShape(13.dp))
+            .shadow(elevation = 1.dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
             .background(color = Color(0xFFFFFFFF)),
         verticalArrangement = Arrangement.Center
     ) {

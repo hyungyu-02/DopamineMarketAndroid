@@ -56,7 +56,7 @@ fun LazyRoutineComponent(
     Text(
         modifier = modifier
             .padding(
-                start = 10.dp,
+                start = 29.dp,
                 bottom = 17.dp
             ),
         text = name,
