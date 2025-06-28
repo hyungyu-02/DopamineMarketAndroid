@@ -36,7 +36,8 @@ fun RoutineComponent(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .border(1.dp, Color.Blue),
+            .border(1.dp, Color.Blue)
+            .background(color = Color(0xFFFFFFFF)),
         verticalArrangement = Arrangement.Center
     ) {
         Row(
